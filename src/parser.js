@@ -1,17 +1,13 @@
-import fs from 'fs';
+import path from 'path';
 import yaml from 'js-yaml';
 
 
 export default (file) => {
     const configPath = 'path/to/eslint';
     const format = path.extname(configPath);
-    const data = fs.readSync(configPath);
 
-    let parse;
-    if (format === '') {
-      parse = JSON.parse;
-    } else if (format === '.yml') {
-      parse = yaml.safeLoad;
+    if (format === 'json') {
+      return JSON.parse(file);
     }
-    return parse(file);
+    return yaml.load(file);
 };
