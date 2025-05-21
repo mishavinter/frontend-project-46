@@ -23,3 +23,6 @@ const resultYaml = fs.readFileSync(`${__dirname}/../__fixtures__/result.yaml`, '
 test('check yaml-files equality', () => {
   expect(gendiff(yaml1, yaml2)).toEqual(resultYaml);
 });
+
+const resultPlain = fs.readFileSync(`${__dirname}/../__fixtures__/resultPlain.txt`, 'utf-8');
+expect(gendiff(json1, json2, 'plain')).toEqual(resultPlain);
