@@ -10,7 +10,8 @@ const formatters = {
 
 const getFormatter = (format) => {
   if (!formatters[format]) {
-    throw new Error(`Unknown format: ${format}`)
+    const availableFormats = Object.keys(formatters).join(', ')
+    throw new Error(`Unknown format: ${format}. Available formats: ${availableFormats}`)
   }
   return formatters[format]
 }
