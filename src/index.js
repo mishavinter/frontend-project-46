@@ -1,17 +1,15 @@
-import path from 'path'
-import fs from 'fs'
-import parse from './parser.js'
-
+import _ from 'lodash'
+import parser from './parser.js'
+import sortKeys from './sortKeys.js'
+import formatter from '../formatters/index.js'
 import makeInternalRepresentation from './makeInternalRepresentation.js'
-import formatDiff from '../formatters/index.js'
 
 export default (filepath1, filepath2, format = 'stylish') => {
-  const obj1 = fs.readFileSync(path.resolve(filepath1), 'utf-8')
-  const obj2 = fs.readFileSync(path.resolve(filepath2), 'utf-8')
+  const obj1 = parser(filepath1)
+  const obj2 = parser(filepath2)
 
-  const parsedObj1 = parse(obj1)
-  const parsedObj2 = parse(obj2)
+  const internalRepresentation = makeInternalRepresentation(obj1, obj2)
+  const sortedIntRepresent = sortKeys(internalRepresentation)
 
-  const internalRepresentation = makeInternalRepresentation(parsedObj1, parsedObj2)
-  return formatDiff(internalRepresentation, format)
+  return formatter(sortedIntRepresent, format)
 }
