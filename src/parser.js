@@ -1,12 +1,15 @@
+import fs from 'fs'
 import path from 'path'
 import yaml from 'js-yaml'
 
-export default (file) => {
-  const configPath = 'path/to/eslint'
-  const format = path.extname(configPath)
+export default (filepath) => {
+  const data = fs.readFileSync(path.resolve(filepath), 'utf-8')
 
-  if (format === 'json') {
-    return JSON.parse(file)
+  if (path.extname(filepath) === '.json') {
+    return JSON.parse(data)
   }
-  return yaml.load(file)
+  else if (path.extname(filepath) === '.yml' || path.extname(filepath) === '.yaml') {
+    return yaml.load(data)
+  }
+  throw Error('Unexpected format')
 }
