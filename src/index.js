@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import parser from './parser.js'
 import sortKeys from './sortKeys.js'
 import formatter from '../formatters/index.js'

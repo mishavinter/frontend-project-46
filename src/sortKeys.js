@@ -8,5 +8,5 @@ const sortKeys = (obj) => {
     .map(([key, value]) => [key, sortKeys(value)])
   return Object.fromEntries(sortedEntries)
 }
- export default sortKeys
- 
+
+export default sortKeys
