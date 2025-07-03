@@ -24,3 +24,17 @@ test('check equality of YAML files with stylish format', () => {
 test('check equality of JSON and YAML files with stylish format', () => {
   expect(gendiff(json1, yaml2)).toEqual(result)
 })
+
+const resultPlain = fs.readFileSync(`${__dirname}/__fixtures__/resultPlain.txt`, 'utf-8')
+
+test('check equality of JSON files with plain format', () => {
+  expect(gendiff(json1, json2, 'plain')).toEqual(resultPlain)
+})
+
+test('check equality of YAML files with plain format', () => {
+  expect(gendiff(yaml1, yaml2, 'plain')).toEqual(resultPlain)
+})
+
+test('check equality of JSON and YAML files with plain format', () => {
+  expect(gendiff(json1, yaml2, 'plain')).toEqual(resultPlain)
+})
