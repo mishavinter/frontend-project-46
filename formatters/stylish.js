@@ -1,26 +1,32 @@
 import stringify from '../src/stringify.js'
 
-const diffFormatter = (diff, replacer = ' ', spacesCount = 2, currentIndent = '') => {
-  console.log('diff', Object.entries(diff))
-  const result = Object.entries(diff).map(([key, { type, ...value }]) => {
-    const newIndentation = currentIndent + replacer.repeat(spacesCount)
+const stylishFormatter = (diff, replacer = ' ', spacesCount = 4, currentIndent = '') => {
+  const newIndentation = currentIndent + replacer.repeat(spacesCount)
 
-    switch (type) {
-      case 'added':
-        return `${newIndentation}"+ ${key}": ${stringify(value['value'], replacer, spacesCount, newIndentation)}`
-      case 'deleted':
-        return `${newIndentation}"- ${key}": ${stringify(value['value'], replacer, spacesCount, newIndentation)}`
-      case 'unchanged':
-        return `${newIndentation}"  ${key}": ${stringify(value['value'], replacer, spacesCount, newIndentation)}`
-      case 'changed': {
-        return `${newIndentation}"- ${key}": ${stringify(value['oldValue'], replacer, spacesCount, newIndentation)},\n` +
-        `${newIndentation}"+ ${key}": ${stringify(value['newValue'], replacer, spacesCount, newIndentation)}`
+  return [
+    '{',
+    ...Object.entries(diff).flatMap(([key, { type, value, oldValue, newValue, children }]) => {
+      const shortIndent = currentIndent + replacer.repeat(spacesCount - 2)
+      switch (type) {
+        case 'added':
+          return `${shortIndent}+ ${key}: ${stringify(value, replacer, spacesCount, newIndentation)}`
+        case 'deleted':
+          return `${shortIndent}- ${key}: ${stringify(value, replacer, spacesCount, newIndentation)}`
+        case 'unchanged':
+          return `${shortIndent}  ${key}: ${stringify(value, replacer, spacesCount, newIndentation)}`
+        case 'changed':
+          return [
+            `${shortIndent}- ${key}: ${stringify(oldValue, replacer, spacesCount, newIndentation)}`,
+            `${shortIndent}+ ${key}: ${stringify(newValue, replacer, spacesCount, newIndentation)}`,
+          ]
+        case 'nested':
+          return `${shortIndent}  ${key}: ${stylishFormatter(children, replacer, spacesCount, newIndentation)}`
+        default:
+          return []
       }
-      default:
-        return `${newIndentation}${key}: ${stringify(value['value'], replacer, spacesCount, newIndentation)}`
-    }
-  }).join(',\n')
-  return `{\n${result}\n}`
+    }),
+    currentIndent + '}',
+  ].join('\n')
 }
 
-export default diffFormatter
+export default stylishFormatter
