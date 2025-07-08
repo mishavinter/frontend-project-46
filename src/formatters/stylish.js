@@ -1,4 +1,4 @@
-import stringify from '../src/stringify.js'
+import stringify from '../stringify.js'
 
 const stylishFormatter = (diff, replacer = ' ', spacesCount = 4, currentIndent = '') => {
   const newIndentation = currentIndent + replacer.repeat(spacesCount)

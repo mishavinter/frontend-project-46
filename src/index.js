@@ -1,6 +1,6 @@
 import parser from './parser.js'
 import sortKeys from './sortKeys.js'
-import formatter from '../formatters/index.js'
+import formatter from './formatters/index.js'
 import makeInternalRepresentation from './makeInternalRepresentation.js'
 
 export default (filepath1, filepath2, format = 'stylish') => {
